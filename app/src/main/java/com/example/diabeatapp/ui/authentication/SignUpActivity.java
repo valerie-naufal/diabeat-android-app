@@ -40,8 +40,8 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 public class SignUpActivity extends AppCompatActivity {
 
     private ActivitySignUpBinding binding;
-    private EditText firstNameEditText, lastNameEditText, usernameEditText, phoneEditText, passwordEditText;
-    private Spinner roleSpinner, genderSpinner, smokingSpinner, sameGenderSpinner, musicSpinner;
+    private EditText firstNameEditText, lastNameEditText, usernameEditText, phoneEditText, emergencyContactEditText, passwordEditText, insulinSensitivityEditText, heightEditText, weightEditText;
+    private Spinner genderSpinner, diabetesTypeSpinner, bloodTypeSpinner;
     private TextView loginLinkText;
     private Button signUpButton;
     private ProgressBar progressBar;
@@ -64,8 +64,14 @@ public class SignUpActivity extends AppCompatActivity {
         lastNameEditText = binding.etLastName;
         usernameEditText = binding.etUsername;
         phoneEditText = binding.etPhoneNumber;
+        emergencyContactEditText = binding.etEmergencyContact;
         passwordEditText = binding.etPassword;
         genderSpinner = binding.spinnerGender;
+        diabetesTypeSpinner = binding.spinnerDiabetesType;
+        bloodTypeSpinner = binding.spinnerBloodType;
+        insulinSensitivityEditText = binding.etInsulinSensitivity;
+        heightEditText = binding.etHeight;
+        weightEditText = binding.etWeight;
         loginLinkText = binding.tvLoginLink;
         signUpButton = binding.btnSignUp;
         progressBar = binding.progressBar;
@@ -95,17 +101,23 @@ public class SignUpActivity extends AppCompatActivity {
             String lastName = lastNameEditText.getText().toString().trim();
             String username = usernameEditText.getText().toString().trim();
             String phone = phoneEditText.getText().toString().trim();
+            String emergencyContact = emergencyContactEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
             String gender = genderSpinner.getSelectedItem().toString();
+            String diabetesType = diabetesTypeSpinner.getSelectedItem().toString();
+            String bloodType = bloodTypeSpinner.getSelectedItem().toString();
+            String insulinSensitivity = insulinSensitivityEditText.getText().toString().trim();
+            String height = heightEditText.getText().toString().trim();
+            String weight = weightEditText.getText().toString().trim();
 
-            if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || phone.isEmpty() || password.isEmpty() || gender.isEmpty()) {
+            if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || phone.isEmpty() || emergencyContact.isEmpty() || password.isEmpty() || gender.isEmpty() || diabetesType.isEmpty() || bloodType.isEmpty() || insulinSensitivity.isEmpty() || height.isEmpty() || weight.isEmpty()) {
                 Toast.makeText(SignUpActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
                 signUpButton.setEnabled(true);
                 return;
             }
 
-            checkUsernameAndRegister(firstName, lastName, username, phone, password, gender);
+            checkUsernameAndRegister(firstName, lastName, username, phone, emergencyContact, password, gender, diabetesType, bloodType, insulinSensitivity, height, weight);
         });
 
         // ClickListener for login text
@@ -115,7 +127,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void checkUsernameAndRegister(String firstName, String lastName, String username, String phone, String password, String gender) {
+    private void checkUsernameAndRegister(String firstName, String lastName, String username, String phone, String emergencyContact, String password, String gender, String diabetesType, String bloodType, String insulinSensitivity, String height, String weight) {
         databaseInstance.collection("users")
                 .whereEqualTo("username", username)
                 .get()
@@ -128,7 +140,7 @@ public class SignUpActivity extends AppCompatActivity {
                         } else {
                             // Hash password and store user
                             String hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
-                            putData(firstName, lastName, username, phone, hashedPassword, gender);
+                            putData(firstName, lastName, username, phone, emergencyContact, hashedPassword, gender, diabetesType, bloodType, insulinSensitivity, height, weight);
                         }
                     } else {
                         Log.w("FIREBASE_TAG", "Error checking username", task.getException());
@@ -137,7 +149,7 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
-    private void putData(String firstName, String lastName, String username, String phone, String hashedPassword, String gender) {
+    private void putData(String firstName, String lastName, String username, String phone, String emergencyContact, String hashedPassword, String gender, String diabetesType, String bloodType, String insulinSensitivity, String height, String weight) {
         Map<String, Object> user = new HashMap<>();
         // Create an empty list of rides
         ArrayList<Map<String, Object>> rides = new ArrayList<>();
@@ -146,8 +158,14 @@ public class SignUpActivity extends AppCompatActivity {
         user.put("last name", lastName);
         user.put("username", username);
         user.put("phone", phone);
+        user.put("emergency contact", emergencyContact);
         user.put("password", hashedPassword);
         user.put("gender", gender);
+        user.put("diabetes type", diabetesType);
+        user.put("blood type", bloodType);
+        user.put("insulin sensitivity", insulinSensitivity);
+        user.put("height", height);
+        user.put("weight", weight);
 
         databaseInstance.collection("users")
                 .add(user)

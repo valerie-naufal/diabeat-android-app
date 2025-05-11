@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.diabeatapp" />
+                  <option name="mobileSdkAppId" value="1:1094472490174:android:4aba43716f32fb42ce92ef" />
+                  <option name="projectId" value="diabeatapp-a577d" />
+                  <option name="projectNumber" value="1094472490174" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

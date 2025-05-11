@@ -216,6 +216,26 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Insulin Sensitivity"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/et_insulin_sensitivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:inputType="numberDecimal"
+                    android:hint="Enter insulin sensitivity index"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="Height (cm)"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -228,6 +248,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
+                    android:inputType="numberDecimal"
                     android:hint="Enter height in centimeters"
                     android:padding="8dp"
                     android:background="@drawable/text_input" />
@@ -247,6 +268,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
+                    android:inputType="numberDecimal"
                     android:hint="Enter weight in kilograms"
                     android:padding="8dp"
                     android:layout_marginBottom="16dp"

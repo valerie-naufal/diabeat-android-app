@@ -54,6 +54,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String username;
+    private String btnEditProfile;
     private Button btnLogout;
     private ProgressBar progressBar;
 
@@ -152,7 +153,12 @@ public class ProfileFragment extends Fragment {
                             String firstName = document.getString("first name");
                             String lastName = document.getString("last name");
                             String phone = document.getString("phone");
-                            String role = document.getString("role");
+                            String emergencyContact = document.getString("emergency contact");
+                            String diabetesType = document.getString("diabetes type");
+                            String bloodType = document.getString("blood type");
+                            String insulinSensitivity = document.getString("insulin sensitivity");
+                            String height = document.getString("height");
+                            String weight = document.getString("weight");
 
                             // Now display them in your layout
                             binding.tvName.setText(firstName + " " + lastName);
@@ -160,6 +166,12 @@ public class ProfileFragment extends Fragment {
                             binding.tvLastname.setText(lastName);
                             binding.tvUsername.setText("@" + username);
                             binding.tvPhoneNumber.setText(phone);
+                            binding.tvEmergencyContact.setText(emergencyContact);
+                            binding.tvDiabetesType.setText(diabetesType);
+                            binding.tvBloodType.setText(bloodType);
+                            binding.tvInsulinSensitivity.setText(insulinSensitivity);
+                            binding.tvHeight.setText(height + " cm");
+                            binding.tvWeight.setText(weight + " kg");
                             String imageUrl = document.getString("profileImageUrl");
                             if (imageUrl != null && !imageUrl.isEmpty()) {
                                 Glide.with(this)

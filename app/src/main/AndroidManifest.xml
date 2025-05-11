@@ -20,6 +20,15 @@
         android:theme="@style/Theme.DiaBeatApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.logs.InsulinActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.logs.GlucoseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.logs.FoodActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true" />
         <activity
