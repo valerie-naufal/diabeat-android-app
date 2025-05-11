@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sign_up"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.authentication.SignUpActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="@drawable/new_background"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="40dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <TextView
+                android:id="@+id/tv_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Up"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_color"
+                android:layout_gravity="center_horizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="40dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="First Name"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/et_first_Name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:hint="Enter first name"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Last Name"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/et_last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:hint="Enter last name"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/et_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:inputType="textEmailAddress"
+                    android:hint="Enter username"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Phone Number"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/et_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:inputType="phone"
+                    android:hint="Enter phone number"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Emergency Contact"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/et_emergency_contact"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:inputType="phone"
+                    android:hint="Enter emergency contact phone number"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Password"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:inputType="textPassword"
+                    android:hint="Enter password"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Gender"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinner_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/gender_options"
+                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Diabetes Type"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinner_diabetes_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/diabetes_options"
+                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Blood Type"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinner_blood_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/blood_type_options"
+                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Height (cm)"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/et_height"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:hint="Enter height in centimeters"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Weight (kg)"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/et_weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:hint="Enter weight in kilograms"
+                    android:padding="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:id="@+id/tv_login_link"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Already have an account? Login"
+                    android:textSize="16sp"
+                    android:textAlignment="center"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/blue"
+                    android:paddingBottom="8dp"
+                    android:clickable="true" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_sign_up"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign Up"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/button_blue"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:text="© 2025 DiaBeat, Inc."
+                android:textAlignment="center"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminate="true"
+        style="?android:attr/progressBarStyleLarge"
+        android:background="@drawable/loading_background" />
+</FrameLayout>

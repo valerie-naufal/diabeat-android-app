@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Dashboard -->
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/home_icon_selector"
+        android:title="@string/title_dashboard" />
+
+    <!-- Logs -->
+    <item
+        android:id="@+id/navigation_logs"
+        android:icon="@drawable/list_icon_selector"
+        android:title="@string/title_logs" />
+
+    <!-- Add Logs -->
+    <item
+        android:id="@+id/navigation_add_logs"
+        android:icon="@drawable/add_icon_selector"
+        android:title="@string/title_add_logs" />
+
+    <!-- Consumption -->
+    <item
+        android:id="@+id/navigation_consumption"
+        android:icon="@drawable/consumption_icon_selector"
+        android:title="@string/title_consumption" />
+
+    <!-- Profile -->
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/user_icon_selector"
+        android:title="@string/title_profile" />
+
+</menu>

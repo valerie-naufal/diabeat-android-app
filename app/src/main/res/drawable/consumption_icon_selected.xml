@@ -1,0 +1,23 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="91dp"
+    android:height="91dp"
+    android:viewportWidth="71"
+    android:viewportHeight="71">
+
+    <!-- Circular Border -->
+    <path
+        android:pathData="M35.5,35.5m-34.5,0a34.5,34.5 0,1 1,69 0a34.5,34.5 0,1 1,-69 0"
+        android:strokeWidth="2"
+        android:fillColor="#FDFDFD"
+        android:strokeColor="#7596E9" />
+
+    <!-- Graph Icon (3 bars) -->
+    <path
+        android:pathData="M22,45 L26,45 L26,30 L22,30 Z
+                          M32,45 L36,45 L36,25 L32,25 Z
+                          M42,45 L46,45 L46,35 L42,35 Z"
+        android:fillColor="#FDFDFD"
+        android:strokeColor="#7596E9"
+        android:strokeWidth="2"
+        android:strokeLineJoin="round" />
+</vector>
