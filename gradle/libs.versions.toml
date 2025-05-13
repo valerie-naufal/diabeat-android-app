@@ -26,6 +26,7 @@ firebaseDatabase = "21.0.0"
 firebaseAuth = "23.2.0"
 firebaseFirestore = "25.1.2"
 bcrypt = "0.9.0"
+bluetooth = "1.0.0-alpha02"
 
 [libraries]
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
@@ -60,6 +61,8 @@ glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", versi
 imagepicker = { group = "com.github.dhaval2404", name = "imagepicker", version = "2.1" }
 android-maps-utils = { group = "com.google.maps.android", name = "android-maps-utils", version = "3.4.0" }
 okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version = "4.10.0" }
+androidx-bluetooth = { group = "androidx.bluetooth", name = "bluetooth", version.ref = "bluetooth" }
+tensorflowlite = { group = "org.tensorflow", name = "tensorflow-lite", version = "2.12.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
