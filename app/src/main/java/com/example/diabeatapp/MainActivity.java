@@ -3,7 +3,6 @@ package com.example.diabeatapp;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -26,9 +25,16 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.diabeatapp.databinding.ActivityMainBinding;
 
-import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private static final UUID BELT_PI_UUID = UUID.fromString("0000110a-0000-1000-8000-00805F9B34FB");
     private BluetoothDevice raspberryPiDevice;
     private static final int REQUEST_BLUETOOTH_PERMISSION = 100;
+    private boolean canSendDosage = true;
     private String glucoseLevel;
     private String bloodSugarLevel;
     private String pumpDurationMs;
@@ -63,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setItemIconTintList(null); // preserve original icon colors
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_dashboard, R.id.navigation_logs, R.id.navigation_add_logs, R.id.navigation_consumption, R.id.navigation_profile)
+                R.id.navigation_dashboard, R.id.navigation_logs, R.id.navigation_add_logs, R.id.navigation_profile)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -103,30 +110,107 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(() -> Toast.makeText(MainActivity.this, "Connected to Wrist Pi", Toast.LENGTH_SHORT).show());
 
                 BluetoothServiceGlucose.getInstance().listenForData(data -> {
-                    int sensorValue = 0;
-                    if(!data.contains(".") && !data.isEmpty()){
-                        sensorValue = Integer.parseInt(data);
-                    }
-
-                    if(sensorValue > 499){
-                        // Get from firebase
-                        double weight = 90.5;
-                        double tdd = weight * 0.3;
-
-                        // Get from firebase
-                        double carbs = 5.0;
-
-                        // Send to firebase
-                        double glucose = (-2.65) * Math.pow(10, -5) * sensorValue * sensorValue + 0.0814 * sensorValue + 58.02;
-
-                        // Send to firebase
-                        double insulinDose = (carbs/(500/tdd)) + ((glucose - 100)/(1800/tdd));
-
-                        // Pump duration in milliseconds
-                        int pumpDurationMs = (int)((insulinDose/10)) * 1000;
-                        Log.d("MainActivity", "Calculated glucose/blood sugar level: " + data);
-                    }
+                    int sensorValue = (!data.contains(".") && !data.isEmpty()) ? Integer.parseInt(data) : 0;
                     Log.d("MainActivity", "Received sensor value: " + sensorValue);
+
+                    String username = getSharedPreferences("UserPrefs", MODE_PRIVATE).getString("username", null);
+                    if (username == null) {
+                        Log.e("MainActivity", "Username not found in SharedPreferences");
+                        return;
+                    }
+
+                    String insulinType = getSharedPreferences("UserPrefs", MODE_PRIVATE).getString("insulin type", null);
+                    if (insulinType == null) {
+                        Log.e("MainActivity", "Insulin type not found in SharedPreferences");
+                        return;
+                    }
+
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("users")
+                            .whereEqualTo("username", username)
+                            .get()
+                            .addOnSuccessListener(userDocs -> {
+                                if (userDocs.isEmpty()) return;
+
+                                DocumentSnapshot userDoc = userDocs.getDocuments().get(0);
+                                double weight = Double.parseDouble(userDoc.getString("weight"));
+                                double tdd = weight * 0.3;
+
+                                db.collection("food logs")
+                                        .whereEqualTo("username", username)
+                                        .orderBy("timestamp", Query.Direction.DESCENDING)
+                                        .limit(1)
+                                        .get()
+                                        .addOnSuccessListener(foodDocs -> {
+                                            if (foodDocs.isEmpty()) return;
+
+                                            DocumentSnapshot foodDoc = foodDocs.getDocuments().get(0);
+                                            double carbs = Double.parseDouble(foodDoc.getString("carbs"));
+
+                                            // Calculate glucose
+                                            double glucose = Math.abs((-2.65) * Math.pow(10, -5) * sensorValue * sensorValue + 0.0814 * sensorValue + 58.02);
+                                            Log.d("MainActivity", "Glucose = " + glucose);
+
+                                            // Always log glucose
+                                            Map<String, Object> glucoseLog = new HashMap<>();
+                                            glucoseLog.put("username", username);
+                                            glucoseLog.put("glucose", String.valueOf(glucose));
+                                            glucoseLog.put("timestamp", new Date());
+                                            db.collection("glucose logs").add(glucoseLog);
+
+                                            if (!canSendDosage) {
+                                                // Only glucose is logged
+                                                return;
+                                            }
+
+                                            // Now handle insulin + pump
+                                            double insulinDose = (carbs / (500 / tdd)) + ((glucose - 100) / (1800 / tdd));
+                                            int pumpDurationMs = (int) (insulinDose * 100);
+
+                                            Log.d("MainActivity", "Insulin Dose = " + insulinDose + ", Duration = " + pumpDurationMs);
+
+                                            // Log insulin dose
+                                            Map<String, Object> insulinLog = new HashMap<>();
+                                            insulinLog.put("username", username);
+                                            insulinLog.put("insulinDose", String.valueOf(insulinDose));
+                                            insulinLog.put("type", "bolus");
+                                            insulinLog.put("timestamp", new Date());
+                                            db.collection("insulin logs").add(insulinLog);
+
+                                            if (pumpDurationMs > 300 && BluetoothServiceInsulin.getInstance().isConnected()) {
+                                                canSendDosage = false;
+                                                BluetoothServiceInsulin.getInstance().sendPumpDuration(String.valueOf(pumpDurationMs));
+                                                Log.d("MainActivity", "Sending dosage to pump: " + pumpDurationMs);
+
+                                                long delay = 43200000;
+                                                if (insulinType.equalsIgnoreCase("Short acting")) {
+                                                    delay = 14400000;
+                                                } else if (insulinType.equalsIgnoreCase("Intermediate acting")) {
+                                                    delay = 43200000;
+                                                } else if (insulinType.equalsIgnoreCase("Long acting")) {
+                                                    delay = 86400000;
+                                                }
+
+                                                Log.d("MainActivity", "Insulin type:" + insulinType + " ,delay = " + delay);
+
+                                                // Delay before allowing another dose
+                                                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                                    canSendDosage = true;
+                                                    Log.d("MainActivity", "Ready to send next dosage");
+                                                    // We set a timer/delay of 43,200,000 milliseconds = 12 hours so that
+                                                    // the user does not get injected with insulin too soon and risk
+                                                    // insulin stacking which could lead to hypoglycemia. The timer/delay
+                                                    // we set is based off of the type of insulin being used and in this
+                                                    // case it is intermediate-acting insulin. For short-acting insulin
+                                                    // the timer/delay would be 14,400,000 milliseconds = 4 hours, and
+                                                    // for long-acting insulin the timer/delay would be 86,400,000 = 24
+                                                    // hours and in some cases can be 42 hours.
+                                                }, delay); // 12 hours
+                                            } else {
+                                                canSendDosage = true; // allow retry next time
+                                            }
+                                        });
+                            });
                 });
             }
 
@@ -154,11 +238,13 @@ public class MainActivity extends AppCompatActivity {
         BluetoothServiceInsulin.getInstance().connectToDevice(insulinDevice, BELT_PI_UUID, this, new BluetoothServiceGlucose.ConnectionCallback() {
             @Override
             public void onConnected() {
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    Log.d("MainActivity", "Connected to PicoW-Belt");
-                    // The dosage is hard-coded for the time being until we configure the GlucoseML model
-                    BluetoothServiceInsulin.getInstance().sendPumpDuration("1000");
-                }, 5000); // 5-second delay
+                //new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                Log.d("MainActivity", "Connected to PicoW-Belt");
+                // The dosage is hard-coded for the time being until we configure the GlucoseML model
+                //BluetoothServiceInsulin.getInstance().sendPumpDuration("1000");
+                //}, 5000); // 5-second delay
+                //Log.d("MainActivity", "Connected to PicoW-Belt");
+                // No sending here. We wait for calculated values from glucose.
             }
 
             @Override

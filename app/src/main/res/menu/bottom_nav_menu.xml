@@ -20,10 +20,12 @@
         android:title="@string/title_add_logs" />
 
     <!-- Consumption -->
+    <!-- removed consumption fragment from navigation menu
+    because we could not read battery consumption levels
     <item
         android:id="@+id/navigation_consumption"
         android:icon="@drawable/consumption_icon_selector"
-        android:title="@string/title_consumption" />
+        android:title="@string/title_consumption" /> -->
 
     <!-- Profile -->
     <item

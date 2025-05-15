@@ -18,4 +18,15 @@
         <item>O+</item>
         <item>O-</item>
     </string-array>
+    <string-array name="insulin_type_options">
+        <item>Short acting</item>
+        <item>Intermediate acting</item>
+        <item>Long acting</item>
+    </string-array>
+    <string-array name="meal_type_options">
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+        <item>Snack</item>
+    </string-array>
 </resources>

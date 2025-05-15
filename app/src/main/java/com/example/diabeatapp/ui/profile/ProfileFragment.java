@@ -54,32 +54,16 @@ public class ProfileFragment extends Fragment {
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String username;
-    private String btnEditProfile;
-    private Button btnLogout;
+    private Button btnLogout, btnEditProfile;
     private ProgressBar progressBar;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ProfileFragment newInstance(String param1, String param2) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
@@ -109,11 +93,6 @@ public class ProfileFragment extends Fragment {
                         }
                     }
                 });
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -156,6 +135,7 @@ public class ProfileFragment extends Fragment {
                             String emergencyContact = document.getString("emergency contact");
                             String diabetesType = document.getString("diabetes type");
                             String bloodType = document.getString("blood type");
+                            String insulinType = document.getString("insulin type");
                             String insulinSensitivity = document.getString("insulin sensitivity");
                             String height = document.getString("height");
                             String weight = document.getString("weight");
@@ -169,6 +149,7 @@ public class ProfileFragment extends Fragment {
                             binding.tvEmergencyContact.setText(emergencyContact);
                             binding.tvDiabetesType.setText(diabetesType);
                             binding.tvBloodType.setText(bloodType);
+                            binding.tvInsulinType.setText(insulinType);
                             binding.tvInsulinSensitivity.setText(insulinSensitivity);
                             binding.tvHeight.setText(height + " cm");
                             binding.tvWeight.setText(weight + " kg");
@@ -187,6 +168,32 @@ public class ProfileFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
         }
+
+        btnEditProfile = binding.btnEditProfile;
+
+        // Animate the click of the button
+        btnEditProfile.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    v.animate().scaleX(0.97f).scaleY(0.97f).setDuration(100).start();
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
+                    break;
+            }
+            return false; // Let the click still happen
+        });
+
+        // Specify what happens when the edit profile button is clicked
+        btnEditProfile.setOnClickListener(v -> {
+            btnEditProfile.setEnabled(false);
+
+            Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            getActivity().finish();
+        });
 
         btnLogout = binding.btnLogout;
 

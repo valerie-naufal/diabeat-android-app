@@ -41,7 +41,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private ActivitySignUpBinding binding;
     private EditText firstNameEditText, lastNameEditText, usernameEditText, phoneEditText, emergencyContactEditText, passwordEditText, insulinSensitivityEditText, heightEditText, weightEditText;
-    private Spinner genderSpinner, diabetesTypeSpinner, bloodTypeSpinner;
+    private Spinner genderSpinner, diabetesTypeSpinner, bloodTypeSpinner, insulinTypeSpinner;
     private TextView loginLinkText;
     private Button signUpButton;
     private ProgressBar progressBar;
@@ -69,6 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
         genderSpinner = binding.spinnerGender;
         diabetesTypeSpinner = binding.spinnerDiabetesType;
         bloodTypeSpinner = binding.spinnerBloodType;
+        insulinTypeSpinner = binding.spinnerInsulinType;
         insulinSensitivityEditText = binding.etInsulinSensitivity;
         heightEditText = binding.etHeight;
         weightEditText = binding.etWeight;
@@ -106,18 +107,19 @@ public class SignUpActivity extends AppCompatActivity {
             String gender = genderSpinner.getSelectedItem().toString();
             String diabetesType = diabetesTypeSpinner.getSelectedItem().toString();
             String bloodType = bloodTypeSpinner.getSelectedItem().toString();
+            String insulinType = insulinTypeSpinner.getSelectedItem().toString();
             String insulinSensitivity = insulinSensitivityEditText.getText().toString().trim();
             String height = heightEditText.getText().toString().trim();
             String weight = weightEditText.getText().toString().trim();
 
-            if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || phone.isEmpty() || emergencyContact.isEmpty() || password.isEmpty() || gender.isEmpty() || diabetesType.isEmpty() || bloodType.isEmpty() || insulinSensitivity.isEmpty() || height.isEmpty() || weight.isEmpty()) {
+            if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || phone.isEmpty() || emergencyContact.isEmpty() || password.isEmpty() || gender.isEmpty() || diabetesType.isEmpty() || bloodType.isEmpty() || insulinType.isEmpty() || insulinSensitivity.isEmpty() || height.isEmpty() || weight.isEmpty()) {
                 Toast.makeText(SignUpActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
                 signUpButton.setEnabled(true);
                 return;
             }
 
-            checkUsernameAndRegister(firstName, lastName, username, phone, emergencyContact, password, gender, diabetesType, bloodType, insulinSensitivity, height, weight);
+            checkUsernameAndRegister(firstName, lastName, username, phone, emergencyContact, password, gender, diabetesType, bloodType, insulinType, insulinSensitivity, height, weight);
         });
 
         // ClickListener for login text
@@ -127,7 +129,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void checkUsernameAndRegister(String firstName, String lastName, String username, String phone, String emergencyContact, String password, String gender, String diabetesType, String bloodType, String insulinSensitivity, String height, String weight) {
+    private void checkUsernameAndRegister(String firstName, String lastName, String username, String phone, String emergencyContact, String password, String gender, String diabetesType, String bloodType, String insulinType, String insulinSensitivity, String height, String weight) {
         databaseInstance.collection("users")
                 .whereEqualTo("username", username)
                 .get()
@@ -140,7 +142,7 @@ public class SignUpActivity extends AppCompatActivity {
                         } else {
                             // Hash password and store user
                             String hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
-                            putData(firstName, lastName, username, phone, emergencyContact, hashedPassword, gender, diabetesType, bloodType, insulinSensitivity, height, weight);
+                            putData(firstName, lastName, username, phone, emergencyContact, hashedPassword, gender, diabetesType, bloodType, insulinType, insulinSensitivity, height, weight);
                         }
                     } else {
                         Log.w("FIREBASE_TAG", "Error checking username", task.getException());
@@ -149,7 +151,7 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
-    private void putData(String firstName, String lastName, String username, String phone, String emergencyContact, String hashedPassword, String gender, String diabetesType, String bloodType, String insulinSensitivity, String height, String weight) {
+    private void putData(String firstName, String lastName, String username, String phone, String emergencyContact, String hashedPassword, String gender, String diabetesType, String bloodType, String insulinType, String insulinSensitivity, String height, String weight) {
         Map<String, Object> user = new HashMap<>();
         // Create an empty list of rides
         ArrayList<Map<String, Object>> rides = new ArrayList<>();
@@ -163,6 +165,7 @@ public class SignUpActivity extends AppCompatActivity {
         user.put("gender", gender);
         user.put("diabetes type", diabetesType);
         user.put("blood type", bloodType);
+        user.put("insulin type", insulinType);
         user.put("insulin sensitivity", insulinSensitivity);
         user.put("height", height);
         user.put("weight", weight);
@@ -175,6 +178,7 @@ public class SignUpActivity extends AppCompatActivity {
                     SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("username", username); // Save unique identifier
+                    editor.putString("insulin type", insulinType);
                     editor.apply();
 
                     startActivity(new Intent(SignUpActivity.this, MainActivity.class));

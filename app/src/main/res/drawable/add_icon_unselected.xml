@@ -8,13 +8,13 @@
     <path
         android:pathData="M35.5,35.5m-34.5,0a34.5,34.5 0,1 1,69 0a34.5,34.5 0,1 1,-69 0"
         android:strokeWidth="2"
-        android:fillColor="#838383"
+        android:fillColor="#FDFDFD"
         android:strokeColor="#838383"/>
 
     <!-- Add Icon (Plus sign) -->
     <path
         android:pathData="M35.5,25 L35.5,46 M25,35.5 L46,35.5"
         android:strokeWidth="4"
-        android:strokeColor="#FDFDFD"
+        android:strokeColor="#838383"
         android:strokeLineCap="round"/>
 </vector>

@@ -23,11 +23,11 @@
         android:label="@string/title_add_logs"
         tools:layout="@layout/fragment_add_logs" />
 
-    <fragment
+    <!-- <fragment
         android:id="@+id/navigation_consumption"
         android:name="com.example.diabeatapp.ui.consumption.ConsumptionFragment"
         android:label="@string/title_consumption"
-        tools:layout="@layout/fragment_consumption" />
+        tools:layout="@layout/fragment_consumption" /> -->
 
     <fragment
         android:id="@+id/navigation_profile"

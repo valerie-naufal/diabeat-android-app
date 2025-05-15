@@ -2,6 +2,7 @@ package com.example.diabeatapp.ui.dashboard;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
     private String username;
+    private long lastUpdateTime  = 0; //in milliseconds
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,8 +58,39 @@ public class DashboardFragment extends Fragment {
             Toast.makeText(getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
         }
 
-        final TextView textView = binding.tvUpdates;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        TextView glucoseTextView = binding.tvGlucoseLevel;
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("glucose logs")
+                .whereEqualTo("username", username)
+                .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
+                .limit(1)
+                .addSnapshotListener((snapshots, e) -> {
+                    if (e != null) {
+                        Toast.makeText(getContext(), "Failed to load glucose level.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (snapshots != null && !snapshots.isEmpty()) {
+                        long now = System.currentTimeMillis();
+                        if (now - lastUpdateTime < 1000) return; // throttle to 0.5 seconds
+                        lastUpdateTime = now;
+
+                        String glucoseValue = snapshots.getDocuments().get(0).getString("glucose");
+                        double glucoseValueAsDouble = Double.parseDouble(glucoseValue);
+                        if (glucoseValue != null && glucoseValueAsDouble > 60) {
+                            try {
+                                double glucoseDouble = Double.parseDouble(glucoseValue);
+                                String formattedGlucose = String.format("%.2f", glucoseDouble);
+                                glucoseTextView.setText(formattedGlucose);
+                            } catch (NumberFormatException ex) {
+                                glucoseTextView.setText(glucoseValue);
+                            }
+                            Log.d("DashboardFragment", "Loaded glucose level: " + glucoseValue);
+                        }
+                    }
+                });
+
         return root;
     }
 

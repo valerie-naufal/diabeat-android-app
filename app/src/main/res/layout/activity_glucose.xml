@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/food_logs"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.logs.GlucoseActivity">
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    android:paddingTop="30dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="10dp"
+    android:clipToPadding="false"
+    android:background="@drawable/new_background"
+    app:layoutManager="LinearLayoutManager"
+    tools:context=".ui.logs.GlucoseActivity"
+    tools:listitem="@layout/fragment_glucose_item" />

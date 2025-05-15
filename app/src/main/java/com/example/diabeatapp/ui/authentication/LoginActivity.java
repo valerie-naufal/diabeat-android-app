@@ -29,6 +29,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.database.Transaction;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -117,12 +118,23 @@ public class LoginActivity extends AppCompatActivity {
                             BCrypt.Result result = BCrypt.verifyer().verify(enteredPassword.toCharArray(), storedHashedPassword);
 
                             if (result.verified) {
-                                // Login successful
-                                Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-                                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("username", enteredUsername); // Save unique identifier
-                                editor.apply();
+                                databaseInstance.collection("users")
+                                        .whereEqualTo("username", enteredUsername)
+                                        .get()
+                                        .addOnSuccessListener(userDocs -> {
+                                            if (userDocs.isEmpty()) return;
+
+                                            DocumentSnapshot userDoc = userDocs.getDocuments().get(0);
+                                            String insulinType = userDoc.getString("insulin type");
+
+                                            // Login successful
+                                            Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                                            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                                            editor.putString("username", enteredUsername); // Save unique identifier
+                                            editor.putString("insulin type", insulinType);
+                                            editor.apply();
+                                });
 
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 finish();

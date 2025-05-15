@@ -15,6 +15,7 @@ import com.example.diabeatapp.bluetooth.BluetoothServiceGlucose;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.UUID;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class BluetoothServiceInsulin {
 
@@ -23,6 +24,8 @@ public class BluetoothServiceInsulin {
     private OutputStream outputStream;
     private static final String TAG = "BluetoothServiceInsulin";
     private boolean isConnected = false;
+    private final LinkedBlockingQueue<String> sendQueue = new LinkedBlockingQueue<>();
+    private Thread senderThread;
 
     private BluetoothServiceInsulin() {}
 
@@ -66,6 +69,7 @@ public class BluetoothServiceInsulin {
 
                 outputStream = bluetoothSocket.getOutputStream();
                 isConnected = true;
+                startSenderThread();
                 callback.onConnected();
                 Log.d(TAG, "Connected to device: " + device.getName());
             } catch (IOException e) {
@@ -75,7 +79,28 @@ public class BluetoothServiceInsulin {
         }).start();
     }
 
-    public void sendPumpDuration(String durationMs) {
+    private void startSenderThread() {
+        senderThread = new Thread(() -> {
+            while (isConnected) {
+                try {
+                    String duration = sendQueue.take(); // waits if empty
+                    if (outputStream != null) {
+                        outputStream.write(duration.getBytes());
+                        outputStream.flush();
+                        Log.d(TAG, "Dosage sent: " + duration);
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } catch (IOException e) {
+                    Log.e(TAG, "Failed to send dosage", e);
+                }
+            }
+        });
+        senderThread.start();
+    }
+
+    // Old sendPumpDuration
+    /*public void sendPumpDuration(String durationMs) {
         if (outputStream != null && isConnected) {
             try {
                 outputStream.write(durationMs.getBytes());
@@ -86,6 +111,15 @@ public class BluetoothServiceInsulin {
             }
         } else {
             Log.e("BluetoothServiceInsulin", "Not connected or outputStream is null");
+        }
+    }*/
+
+    // New sendPumpDuration
+    public void sendPumpDuration(String durationMs) {
+        if (isConnected) {
+            sendQueue.offer(durationMs);
+        } else {
+            Log.e(TAG, "Not connected to insulin device");
         }
     }
 

@@ -98,8 +98,15 @@
                 android:textSize="16sp"
                 android:textAllCaps="false"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/button_blue"
+                android:background="@drawable/button_new_blue"
                 android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:text="© 2025 DiaBeat, Inc."
+                android:textAlignment="center"/>
 
         </LinearLayout>
     </ScrollView>

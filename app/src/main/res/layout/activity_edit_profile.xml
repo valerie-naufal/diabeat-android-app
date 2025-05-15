@@ -22,10 +22,10 @@
             android:paddingRight="20dp">
 
             <TextView
-                android:id="@+id/tv_sign_up"
+                android:id="@+id/tv_edit_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign Up"
+                android:text="Edit Profile"
                 android:textSize="40sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_color"
@@ -133,26 +133,6 @@
                     android:textSize="16sp"
                     android:inputType="phone"
                     android:hint="Enter emergency contact phone number"
-                    android:padding="8dp"
-                    android:background="@drawable/text_input" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Password"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:paddingTop="16dp"
-                    android:textColor="@color/text_color"
-                    android:paddingBottom="8dp" />
-
-                <EditText
-                    android:id="@+id/et_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:inputType="textPassword"
-                    android:hint="Enter password"
                     android:padding="8dp"
                     android:background="@drawable/text_input" />
 
@@ -293,25 +273,13 @@
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/text_input" />
 
-                <TextView
-                    android:id="@+id/tv_login_link"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Already have an account? Login"
-                    android:textSize="16sp"
-                    android:textAlignment="center"
-                    android:paddingTop="16dp"
-                    android:textColor="@color/blue"
-                    android:paddingBottom="8dp"
-                    android:clickable="true" />
-
             </LinearLayout>
 
             <Button
-                android:id="@+id/btn_sign_up"
+                android:id="@+id/btn_update_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sign Up"
+                android:text="Update Profile"
                 android:textSize="16sp"
                 android:textAllCaps="false"
                 android:layout_gravity="center_horizontal"
@@ -320,7 +288,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="100dp"
                 android:layout_margin="10dp"
                 android:text="© 2025 DiaBeat, Inc."
                 android:textAlignment="center"/>
